@@ -29,7 +29,6 @@ import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -46,11 +45,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -374,17 +373,17 @@ public class ClientServer implements Runnable {
 
             if (cursor.getCount() > 0) {
                 do {
-                    List row = new ArrayList();
+                    List<Object> row = new ArrayList<>();
                     for (int i = 0; i < cursor.getColumnCount(); i++) {
                         switch (cursor.getType(i)) {
                             case Cursor.FIELD_TYPE_BLOB:
                                 row.add(cursor.getBlob(i));
                                 break;
                             case Cursor.FIELD_TYPE_FLOAT:
-                                row.add(Float.valueOf(cursor.getFloat(i)));
+                                row.add(cursor.getFloat(i));
                                 break;
                             case Cursor.FIELD_TYPE_INTEGER:
-                                row.add(Integer.valueOf(cursor.getInt(i)));
+                                row.add(cursor.getInt(i));
                                 break;
                             case Cursor.FIELD_TYPE_STRING:
                                 row.add(cursor.getString(i));
@@ -397,7 +396,7 @@ public class ClientServer implements Runnable {
 
                 } while (cursor.moveToNext());
             }
-
+            cursor.close();
             return response;
         } else {
             Response response = new Response();
@@ -409,8 +408,11 @@ public class ClientServer implements Runnable {
 
     public Response getDBList() {
         Response response = new Response();
-        for (String name : mDatabaseDir.list()) {
-            response.rows.add(name);
+        if (mDatabaseDir != null && mDatabaseDir.list() != null) {
+            String[] list = mDatabaseDir.list();
+            if (list != null) {
+                Collections.addAll(response.rows, list);
+            }
         }
         response.rows.add(Constants.APP_SHARED_PREFERENCES);
         response.isSuccessful = true;
@@ -427,6 +429,7 @@ public class ClientServer implements Runnable {
                 c.moveToNext();
             }
         }
+        c.close();
         response.isSuccessful = true;
         return response;
     }
@@ -450,7 +453,7 @@ public class ClientServer implements Runnable {
         SharedPreferences preferences = mContext.getSharedPreferences(tag, Context.MODE_PRIVATE);
         Map<String, ?> allEntries = preferences.getAll();
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            List row = new ArrayList();
+            List<String> row = new ArrayList<>();
             row.add(entry.getKey());
             row.add(entry.getValue().toString());
             response.rows.add(row);

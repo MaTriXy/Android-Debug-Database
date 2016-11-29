@@ -18,7 +18,7 @@
 ### Using Android Debug Database Library in your application
 Add this to your app's build.gradle
 ```groovy
-debugCompile 'com.amitshekhar.android:debug-db:0.2.0'
+debugCompile 'com.amitshekhar.android:debug-db:0.4.0'
 ```
 
 Use `debugCompile` so that it will only compile in your debug build and not in your release apk.
@@ -32,6 +32,18 @@ That’s all, just start the application, you will see in the logcat an entry li
 Now open the provided link in your browser.
 
 Important : Your Android phone and laptop should be connected to the same Network (Wifi or LAN).
+
+Note      : If you want use different port other than 8080. 
+            In the app build.gradle file under buildTypes do the following change
+
+```groovy
+debug {
+    resValue("string", "PORT_NUMBER", "8081")
+}
+```
+
+
+
 
 You will see something like this :
 
