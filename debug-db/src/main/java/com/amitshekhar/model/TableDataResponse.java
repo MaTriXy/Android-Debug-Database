@@ -19,23 +19,28 @@
 
 package com.amitshekhar.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by amitshekhar on 15/11/16.
+ * Created by amitshekhar on 04/02/17.
  */
 
-public class Response {
+public class TableDataResponse {
 
-    public List<Object> rows = new ArrayList<>();
-    public List<String> columns = new ArrayList<>();
+    public List<TableInfo> tableInfos;
     public boolean isSuccessful;
-    public String error;
-    public int dbVersion;
+    public List<Object> rows;
+    public String errorMessage;
+    public boolean isEditable;
+    public boolean isSelectQuery;
 
-    public Response() {
-
+    public static class TableInfo {
+        public String title;
+        public boolean isPrimary;
+    }
+    public static class ColumnData {
+        public String dataType;
+        public Object value;
     }
 
 }

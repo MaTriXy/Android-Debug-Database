@@ -17,25 +17,34 @@
  *
  */
 
-package com.amitshekhar.model;
+package com.amitshekhar.utils;
 
-import java.util.ArrayList;
+import android.content.Context;
+
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by amitshekhar on 15/11/16.
+ * Created by amitshekhar on 06/02/17.
  */
 
-public class Response {
+public class DatabaseFileProvider {
 
-    public List<Object> rows = new ArrayList<>();
-    public List<String> columns = new ArrayList<>();
-    public boolean isSuccessful;
-    public String error;
-    public int dbVersion;
+    private DatabaseFileProvider() {
+        // This class in not publicly instantiable
+    }
 
-    public Response() {
-
+    public static HashMap<String, File> getDatabaseFiles(Context context) {
+        HashMap<String, File> databaseFiles = new HashMap<>();
+        try {
+            for (String databaseName : context.databaseList()) {
+                databaseFiles.put(databaseName, context.getDatabasePath(databaseName));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return databaseFiles;
     }
 
 }

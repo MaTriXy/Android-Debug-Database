@@ -19,23 +19,15 @@
 
 package com.amitshekhar.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Created by amitshekhar on 15/11/16.
+ * Created by amitshekhar on 04/02/17.
  */
 
-public class Response {
+public class RowDataRequest {
 
-    public List<Object> rows = new ArrayList<>();
-    public List<String> columns = new ArrayList<>();
-    public boolean isSuccessful;
-    public String error;
-    public int dbVersion;
-
-    public Response() {
-
-    }
+    public String title;
+    public boolean isPrimary;
+    public String dataType;
+    public String value;
 
 }
