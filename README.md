@@ -2,20 +2,12 @@
 
 # Android Debug Database
 
-[![Mindorks](https://img.shields.io/badge/mindorks-opensource-blue.svg)](https://mindorks.com/open-source-projects)
-[![Mindorks Community](https://img.shields.io/badge/join-community-blue.svg)](https://mindorks.com/join-community)
-[![Android Weekly](https://img.shields.io/badge/Android%20Weekly-%23233-blue.svg)](http://androidweekly.net/issues/issue-233)
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20Debug%20Database-blue.svg?style=flat)](http://android-arsenal.com/details/1/4667)
-[![API](https://img.shields.io/badge/API-9%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=9)
-[![Download](https://api.bintray.com/packages/amitshekhariitbhu/maven/debug-db/images/download.svg) ](https://bintray.com/amitshekhariitbhu/maven/debug-db/_latestVersion)
-[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](https://opensource.org/licenses/Apache-2.0)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/amitshekhariitbhu/Android-Debug-Database/blob/master/LICENSE)
+## Android Debug Database is a powerful library for debugging databases and shared preferences in Android applications
 
-## Android Debug Database is a powerful library for debugging databases and shared preferences in Android applications.
-
-### Android Debug Database allows you to view databases and shared preferences directly in your browser in a very simple way.
+### Android Debug Database allows you to view databases and shared preferences directly in your browser in a very simple way
 
 ### What can Android Debug Database do?
+
 * See all the databases.
 * See all the data in the shared preferences used in your application.
 * Run any sql query on the given database to update and delete your data.
@@ -27,19 +19,66 @@
 * Search in your data.
 * Sort data.
 * Download database.
+* Debug Room inMemory database.
+
+## About me
+
+Hi, I am Amit Shekhar, Co-Founder @ [Outcome School](https://outcomeschool.com) • IIT 2010-14 • I have taught and mentored many developers, and their efforts landed them high-paying tech jobs, helped many tech companies in solving their unique problems, and created many open-source libraries being used by top companies. I am passionate about sharing knowledge through open-source, blogs, and videos.
+
+You can connect with me on:
+
+- [Twitter](https://twitter.com/amitiitbhu)
+- [YouTube](https://www.youtube.com/@amitshekhar)
+- [LinkedIn](https://www.linkedin.com/in/amit-shekhar-iitbhu)
+- [GitHub](https://github.com/amitshekhariitbhu)
+
+## [Outcome School Blog](https://outcomeschool.com/blog) - High-quality content to learn Android concepts.
 
 ### All these features work without rooting your device -> No need of rooted device
 
-### Check out another awesome library for fast and simple networking in Android.
-* [Fast Android Networking Library](https://github.com/amitshekhariitbhu/Fast-Android-Networking)
-
 ### Using Android Debug Database Library in your application
-Add this to your app's build.gradle
+
+Add this in your `settings.gradle`:
 ```groovy
-debugCompile 'com.amitshekhar.android:debug-db:1.0.1'
+maven { url 'https://jitpack.io' }
 ```
 
-Use `debugCompile` so that it will only compile in your debug build and not in your release build.
+If you are using `settings.gradle.kts`, add the following:
+```kotlin
+maven { setUrl("https://jitpack.io") }
+```
+
+Add this in your `build.gradle`
+```groovy
+debugImplementation 'com.github.amitshekhariitbhu.Android-Debug-Database:debug-db:1.0.7'
+```
+
+If you are using `build.gradle.kts`, add the following:
+```kotlin
+debugImplementation("com.github.amitshekhariitbhu.Android-Debug-Database:debug-db:1.0.7")
+```
+
+Using the Android Debug Database with encrypted database
+
+Add this in your `build.gradle`
+```groovy
+debugImplementation 'com.github.amitshekhariitbhu.Android-Debug-Database:debug-db-encrypt:1.0.7'
+```
+
+If you are using `build.gradle.kts`, add the following:
+```kotlin
+debugImplementation("com.github.amitshekhariitbhu.Android-Debug-Database:debug-db-encrypt:1.0.7")
+```
+
+And to provide the password for the DB, you should add this in the Gradle:
+DB_PASSWORD_{VARIABLE}, if for example, PERSON is the database name: DB_PASSWORD_PERSON
+```groovy
+debug {
+    resValue("string", "DB_PASSWORD_PERSON", "password")
+}
+```
+
+Use `debugImplementation` so that it will only compile in your debug build and not in your release build.
 
 That’s all, just start the application, you will see in the logcat an entry like follows :
 
@@ -50,10 +89,11 @@ That’s all, just start the application, you will see in the logcat an entry li
 Now open the provided link in your browser.
 
 Important:
-- Your Android phone and laptop should be connected to the same Network (Wifi or LAN).
-- If you are using it over usb, run `adb forward tcp:8080 tcp:8080`
 
-Note      : If you want use different port other than 8080. 
+* Your Android phone and laptop should be connected to the same Network (Wifi or LAN).
+* If you are using it over usb, run `adb forward tcp:8080 tcp:8080`
+
+Note      : If you want use different port other than 8080.
             In the app build.gradle file under buildTypes do the following change
 
 ```groovy
@@ -62,23 +102,25 @@ debug {
 }
 ```
 
-
-
-
 You will see something like this :
 
 ### Seeing values
+
 <img src=https://raw.githubusercontent.com/amitshekhariitbhu/Android-Debug-Database/master/assets/debugdb.png >
 
 ### Editing values
+
 <img src=https://raw.githubusercontent.com/amitshekhariitbhu/Android-Debug-Database/master/assets/debugdb_edit.png >
 
 ### Working with emulator
-- Android Default Emulator: Run the command in the terminal - `adb forward tcp:8080 tcp:8080` and open http://localhost:8080
-- Genymotion Emulator: Enable bridge from configure virtual device (option available in genymotion)
+
+* Android Default Emulator: Run the command in the terminal - `adb forward tcp:8080 tcp:8080` and open http://localhost:8080
+* Genymotion Emulator: Enable bridge from configure virtual device (option available in genymotion)
 
 ### Getting address with toast, in case you missed the address log in logcat
+
 As this library is auto-initialize, if you want to get the address log, add the following method and call (we have to do like this to avoid build error in release build as this library will not be included in the release build) using reflection.
+
 ```java
 public static void showDebugDBAddressLogToast(Context context) {
     if (BuildConfig.DEBUG) {
@@ -95,7 +137,9 @@ public static void showDebugDBAddressLogToast(Context context) {
 ```
 
 ### Adding custom database files
-As this library is auto-initialize, if you want to add custom database files, add the following method and call
+
+As this library is auto-initialize, if you want to debug custom database files, add the following method and call
+
 ```java
 public static void setCustomDatabaseFiles(Context context) {
     if (BuildConfig.DEBUG) {
@@ -103,11 +147,11 @@ public static void setCustomDatabaseFiles(Context context) {
             Class<?> debugDB = Class.forName("com.amitshekhar.DebugDB");
             Class[] argTypes = new Class[]{HashMap.class};
             Method setCustomDatabaseFiles = debugDB.getMethod("setCustomDatabaseFiles", argTypes);
-            HashMap<String, File> customDatabaseFiles = new HashMap<>();
+            HashMap<String, Pair<File, String>> customDatabaseFiles = new HashMap<>();
             // set your custom database files
             customDatabaseFiles.put(ExtTestDBHelper.DATABASE_NAME,
-                    new File(context.getFilesDir() + "/" + ExtTestDBHelper.DIR_NAME +
-                            "/" + ExtTestDBHelper.DATABASE_NAME));
+                    new Pair<>(new File(context.getFilesDir() + "/" + ExtTestDBHelper.DIR_NAME +
+                                                    "/" + ExtTestDBHelper.DATABASE_NAME), ""));
             setCustomDatabaseFiles.invoke(null, customDatabaseFiles);
         } catch (Exception ignore) {
 
@@ -116,25 +160,50 @@ public static void setCustomDatabaseFiles(Context context) {
 }
 ```
 
+### Adding InMemory Room databases
+
+As this library is auto-initialize, if you want to debug inMemory Room databases, add the following method and call
+
+```java
+public static void setInMemoryRoomDatabases(SupportSQLiteDatabase... database) {
+    if (BuildConfig.DEBUG) {
+        try {
+            Class<?> debugDB = Class.forName("com.amitshekhar.DebugDB");
+            Class[] argTypes = new Class[]{HashMap.class};
+            HashMap<String, SupportSQLiteDatabase> inMemoryDatabases = new HashMap<>();
+            // set your inMemory databases
+            inMemoryDatabases.put("InMemoryOne.db", database[0]);
+            Method setRoomInMemoryDatabase = debugDB.getMethod("setInMemoryRoomDatabases", argTypes);
+            setRoomInMemoryDatabase.invoke(null, inMemoryDatabases);
+        } catch (Exception ignore) {
+
+        }
+    }
+}
+```
+
 ### Find this project useful ? :heart:
+
 * Support it by clicking the :star: button on the upper right of this page. :v:
 
 ### TODO
+
 * Simplify emulator issue [Issue Link](https://github.com/amitshekhariitbhu/Android-Debug-Database/issues/6)
 * And of course many more features and bug fixes.
 
-### [Check out Mindorks awesome open source projects here](https://mindorks.com/open-source-projects)
+You can connect with me on:
 
-### Contact - Let's become friends
 - [Twitter](https://twitter.com/amitiitbhu)
-- [Github](https://github.com/amitshekhariitbhu)
-- [Medium](https://medium.com/@amitshekhar)
+- [LinkedIn](https://www.linkedin.com/in/amit-shekhar-iitbhu)
+- [GitHub](https://github.com/amitshekhariitbhu)
 - [Facebook](https://www.facebook.com/amit.shekhar.iitbhu)
 
+[**Read all of our blogs here.**](https://outcomeschool.com/blog)
+
 ### License
+
 ```
-   Copyright (C) 2016 Amit Shekhar
-   Copyright (C) 2011 Android Open Source Project
+   Copyright (C) 2024 Amit Shekhar
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -150,5 +219,6 @@ public static void setCustomDatabaseFiles(Context context) {
 ```
 
 ### Contributing to Android Debug Database
+
 All pull requests are welcome, make sure to follow the [contribution guidelines](CONTRIBUTING.md)
 when you submit pull request.
